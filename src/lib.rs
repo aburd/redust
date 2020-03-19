@@ -2,8 +2,12 @@
 extern crate serde_derive;
 extern crate js_sys;
 mod utils;
+mod todos;
+mod actions;
 
 use wasm_bindgen::prelude::*;
+use todos::Todo;
+use actions::{ ActionType, UpdateTodoDoneAction, UpdateTodoDescriptionAction };
 
 // When the `wee_alloc` feature is enabled, use `wee_alloc` as the global
 // allocator.
@@ -12,34 +16,9 @@ use wasm_bindgen::prelude::*;
 static ALLOC: wee_alloc::WeeAlloc = wee_alloc::WeeAlloc::INIT;
 
 
-#[derive(Serialize)]
-pub struct Todo {
-    pub id: u32,
-    pub description: String,
-    pub done: bool,
-}
-
-impl Todo {
-    fn new(id: u32, description: String, done: bool) -> Todo {
-        Todo { id, description, done }
-    }
-}
-
-#[derive(Serialize)]
-pub struct UpdateTodoDoneAction {
-    id: u32,
-    done: bool,
-}
-
-#[derive(Serialize)]
-pub struct UpdateTodoDescriptionAction {
-    id: u32,
-    description: String,
-}
-
-#[derive(Serialize)]
-pub struct State {
-    pub todos: Vec<Todo>,
+#[derive(Serialize, Clone)]
+struct State {
+    todos: Vec<Todo>,
 }
 
 impl State {
@@ -57,12 +36,41 @@ impl State {
 
 struct Store<'a> {
     listeners: Vec<&'a js_sys::Function>,
-    prev_states: Vec<State>
+    prev_states: Vec<State>,
+    state: State,
 }
 
 impl<'a> Store<'a> {
     pub fn subscribe(&'a mut self, f: &'a js_sys::Function) {
         self.listeners.push(f);
+    }
+
+    pub fn dispatch(&mut self, action_type: ActionType, action: &JsValue) {
+        // Get the new state
+        let new_state: State = match action_type {
+            ActionType::UpdateTodoDescription => self.update_description(action),
+            ActionType::UpdateTodoDone => self.update_done(action),
+        };
+
+        // Update the states in the store itself
+        self.prev_states.push(self.state.clone());
+        self.state = new_state;
+
+        // Inform any subscribers
+        for listener in &self.listeners {
+            let this = JsValue::NULL;
+            listener.call0(&this);
+        }
+    }
+
+    fn update_description(&self, action: &JsValue) -> State {
+        let action: UpdateTodoDoneAction = action.into_serde().unwrap();
+        self.state.clone()
+    }
+    
+    fn update_done(&self, action: &JsValue) -> State {
+        let action: UpdateTodoDescriptionAction = action.into_serde().unwrap();
+        self.state.clone()
     }
 }
 
