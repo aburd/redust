@@ -1,0 +1,36 @@
+Arguments: 
+  /Users/aburd/.nvm/versions/node/v12.16.0/bin/node /usr/local/Cellar/yarn/1.21.1/libexec/bin/yarn.js init wasm-app www
+
+PATH: 
+  /Users/aburd/.nvm/versions/node/v12.16.0/bin:/Users/aburd/bin:/usr/local/sbin:/Users/aburd/.cargo/bin:/Users/aburd/.cargo/bin:/Users/aburd/.rvm/gems/ruby-2.5.5/bin:/Users/aburd/.rvm/gems/ruby-2.5.5@global/bin:/Users/aburd/.rvm/rubies/ruby-2.5.5/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Users/aburd/Downloads/google-cloud-sdk/bin:/Users/aburd/.nvm/versions/node/v12.16.0/bin:/Users/aburd/bin:/usr/local/sbin:/Users/aburd/.cargo/bin:/Users/aburd/.rvm/gems/ruby-2.5.5/bin:/Users/aburd/.rvm/gems/ruby-2.5.5@global/bin:/Users/aburd/.rvm/rubies/ruby-2.5.5/bin:/Users/aburd/.rvm/bin:/Users/aburd/.rvm/bin
+
+Yarn version: 
+  1.21.1
+
+Node version: 
+  12.16.0
+
+Platform: 
+  darwin x64
+
+Trace: 
+  Error: canceled
+      at Interface.<anonymous> (/usr/local/Cellar/yarn/1.21.1/libexec/lib/cli.js:136925:13)
+      at Interface.emit (events.js:321:20)
+      at Interface._ttyWrite (readline.js:893:16)
+      at ReadStream.onkeypress (readline.js:198:10)
+      at ReadStream.emit (events.js:321:20)
+      at emitKeys (internal/readline/utils.js:438:14)
+      at emitKeys.next (<anonymous>)
+      at ReadStream.onData (readline.js:1160:36)
+      at ReadStream.emit (events.js:321:20)
+      at addChunk (_stream_readable.js:294:12)
+
+npm manifest: 
+  No manifest
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile
