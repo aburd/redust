@@ -1,4 +1,4 @@
-#[derive(Serialize, Clone)]
+#[derive(Serialize, Clone, Debug, PartialEq, Eq)]
 pub struct Todo {
     pub id: u32,
     pub description: String,

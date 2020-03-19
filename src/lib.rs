@@ -15,6 +15,12 @@ use actions::{ ActionType, UpdateTodoDoneAction, UpdateTodoDescriptionAction };
 #[global_allocator]
 static ALLOC: wee_alloc::WeeAlloc = wee_alloc::WeeAlloc::INIT;
 
+#[wasm_bindgen]
+extern "C" {
+    fn alert(s: &str);
+    #[wasm_bindgen(js_namespace = console)]
+    fn log(s: &str);
+}
 
 #[derive(Serialize, Clone)]
 struct State {
@@ -44,6 +50,7 @@ pub struct Store {
 #[wasm_bindgen]
 impl Store {
     pub fn new() -> Store {
+        utils::set_panic_hook();
         Store {
             listeners: Vec::new(),
             prev_states: Vec::new(),
@@ -81,16 +88,13 @@ impl Store {
     }
 
     fn update_description(&self, action: &JsValue) -> State {
-        let action: UpdateTodoDoneAction = action.into_serde().unwrap();
+        let action: UpdateTodoDescriptionAction = action.into_serde().unwrap();
+        log("update description");
         self.state.clone()
     }
     
     fn update_done(&self, action: &JsValue) -> State {
-        let action: UpdateTodoDescriptionAction = action.into_serde().unwrap();
+        let action: UpdateTodoDoneAction = action.into_serde().unwrap();
         self.state.clone()
     }
-}
-
-extern {
-    fn alert(s: &str);
 }
