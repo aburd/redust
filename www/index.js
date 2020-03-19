@@ -1,39 +1,63 @@
-import React, { Component } from "react"
+import React, { Component, useState, useRef, useEffect } from "react"
 import ReactDOM from "react-dom"
 import { Store, ActionType } from "redust"
 
 const store = Store.new()
 
-function dispatch(actionType, action) {
-    store.dispatch(actionType, action)
-    updateView(store.get_state())
-}
-
-function updateView(state) {
-    console.log(state.todos.map(t => `${t.description}, Done: ${t.done}`).join('\n'))
-}
-dispatch(ActionType.UpdateTodoDescription, {id: 1, description: "A new description!"})
-
-dispatch(ActionType.UpdateTodoDescription, {id: 1, description: "Again!"})
-
-const Todo = ({ id, description, done }) => {
+const Todo = ({ id, description, done, dispatch }) => {
+    const inputEl = useRef(null);
+    const [editable, updateEditable] = useState(false)
+    useEffect(() => {
+        if(inputEl && inputEl.current) {
+            inputEl.current.focus()
+        }
+    }, [editable])
     function toggleDone() {
         dispatch(ActionType.UpdateTodoDone, { id, done: !done })
     }
+    function handleDescriptionChange(e) {
+        dispatch(ActionType.UpdateTodoDescription, { id, description: e.target.value })
+    }
+    function handleFocus() {
+        updateEditable(!editable)
+    }
     return (
         <li>
-            <div className="desc">{description}</div>
+            <div className="desc" onClick={handleFocus}>
+                {editable 
+                    ? <input type="text" ref={inputEl} value={description} onChange={handleDescriptionChange} />
+                    : <div>{description}</div>
+                }
+            </div>
             <div className="done">
-                <input type="checkbox" value={done} onClick={toggleDone} />
+                <input type="checkbox" checked={done} onChange={toggleDone} />
             </div>
         </li>
     )
 }
 
 class App extends Component {
-    state = store.get_state()
+    constructor(props) {
+        super(props)
+
+        this.state = store.get_state()
+        this.dispatch = this.dispatch.bind(this)
+    }
+
+    dispatch(actionType, action) {
+        store.dispatch(actionType, action)
+        this.setState({ ...store.get_state() })
+    }
 
     render() {
-
+        return (
+            <div className="container">
+                <ul>
+                    {this.state.todos.map(todo => <Todo key={todo.id} dispatch={this.dispatch} {...todo} />)}
+                </ul>
+            </div>
+        )
     }
 }
+
+ReactDOM.render(<App />, document.getElementById('app'))
