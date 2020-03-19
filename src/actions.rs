@@ -1,7 +1,8 @@
 use wasm_bindgen::prelude::*;
 
 #[wasm_bindgen]
-#[derive(PartialEq, Debug)]
+#[repr(u8)]
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub enum ActionType {
     UpdateTodoDone,
     UpdateTodoDescription,

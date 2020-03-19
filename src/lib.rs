@@ -34,14 +34,31 @@ impl State {
     }
 }
 
-struct Store<'a> {
-    listeners: Vec<&'a js_sys::Function>,
+#[wasm_bindgen]
+pub struct Store {
+    listeners: Vec<js_sys::Function>,
     prev_states: Vec<State>,
     state: State,
 }
 
-impl<'a> Store<'a> {
-    pub fn subscribe(&'a mut self, f: &'a js_sys::Function) {
+#[wasm_bindgen]
+impl Store {
+    pub fn new() -> Store {
+        Store {
+            listeners: Vec::new(),
+            prev_states: Vec::new(),
+            state: State::new(),
+        }
+    }
+}
+
+#[wasm_bindgen]
+impl Store {
+    pub fn get_state(&self) -> JsValue {
+        JsValue::from_serde(&self.state).unwrap()
+    }
+
+    pub fn subscribe(&mut self, f: js_sys::Function) {
         self.listeners.push(f);
     }
 
@@ -74,13 +91,6 @@ impl<'a> Store<'a> {
     }
 }
 
-#[wasm_bindgen]
 extern {
     fn alert(s: &str);
-}
-
-#[wasm_bindgen]
-pub fn get_state() -> JsValue {
-    let state = State::new();
-    JsValue::from_serde(&state).unwrap()
 }
