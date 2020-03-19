@@ -10,12 +10,12 @@ pub enum ActionType {
 
 #[derive(Deserialize)]
 pub struct UpdateTodoDoneAction {
-    id: u32,
-    done: bool,
+    pub id: u32,
+    pub done: bool,
 }
 
 #[derive(Deserialize)]
 pub struct UpdateTodoDescriptionAction {
-    id: u32,
-    description: String,
+    pub id: u32,
+    pub description: String,
 }

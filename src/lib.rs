@@ -28,14 +28,7 @@ struct State {
 }
 
 impl State {
-    fn new() -> State {
-        let mut todos = Vec::new();
-        let todo1 = Todo::new(1, String::from("Watch the New York Simpsons episode"), false);
-        let todo2 = Todo::new(2, String::from("Code something"), false);
-        let todo3 = Todo::new(3, String::from("Eat some tonkatsu"), false);
-        todos.push(todo1);
-        todos.push(todo2);
-        todos.push(todo3);
+    fn new(todos: Vec<Todo>) -> State {
         State { todos }
     }
 }
@@ -51,10 +44,19 @@ pub struct Store {
 impl Store {
     pub fn new() -> Store {
         utils::set_panic_hook();
+
+        let mut todos = Vec::new();
+        let todo1 = Todo::new(1, String::from("Watch the New York Simpsons episode"), false);
+        let todo2 = Todo::new(2, String::from("Code something"), false);
+        let todo3 = Todo::new(3, String::from("Eat some tonkatsu"), false);
+        todos.push(todo1);
+        todos.push(todo2);
+        todos.push(todo3);
+
         Store {
             listeners: Vec::new(),
             prev_states: Vec::new(),
-            state: State::new(),
+            state: State::new(todos),
         }
     }
 }
@@ -89,12 +91,25 @@ impl Store {
 
     fn update_description(&self, action: &JsValue) -> State {
         let action: UpdateTodoDescriptionAction = action.into_serde().unwrap();
-        log("update description");
-        self.state.clone()
+        let todos: Vec<Todo> = self.state.todos.iter().map(|todo| {
+            if todo.id == action.id { 
+                Todo::new(todo.id, action.description.clone(), todo.done)
+            } else { 
+                todo.clone()
+            }
+        }).collect();
+        State::new(todos)
     }
     
     fn update_done(&self, action: &JsValue) -> State {
         let action: UpdateTodoDoneAction = action.into_serde().unwrap();
-        self.state.clone()
+        let todos: Vec<Todo> = self.state.todos.iter().map(|todo| {
+            if todo.id == action.id { 
+                Todo::new(todo.id, todo.description.clone(), action.done)
+            } else { 
+                todo.clone()
+            }
+        }).collect();
+        State::new(todos)
     }
 }
