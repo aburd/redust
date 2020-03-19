@@ -35,7 +35,7 @@ impl State {
 
 #[wasm_bindgen]
 pub struct Store {
-    listeners: Vec<js_sys::Function>,
+    // listeners: Vec<js_sys::Function>,
     prev_states: Vec<State>,
     state: State,
 }
@@ -54,7 +54,7 @@ impl Store {
         todos.push(todo3);
 
         Store {
-            listeners: Vec::new(),
+            // listeners: Vec::new(),
             prev_states: Vec::new(),
             state: State::new(todos),
         }
@@ -67,9 +67,9 @@ impl Store {
         JsValue::from_serde(&self.state).unwrap()
     }
 
-    pub fn subscribe(&mut self, f: js_sys::Function) {
-        self.listeners.push(f);
-    }
+    // pub fn subscribe(&mut self, f: &js_sys::Function) {
+    //     self.listeners.push(f);
+    // }
 
     pub fn dispatch(&mut self, action_type: ActionType, action: &JsValue) {
         // Get the new state
@@ -82,34 +82,44 @@ impl Store {
         self.prev_states.push(self.state.clone());
         self.state = new_state;
 
+        // TODO: wasm-bindgen currently does not allow the wasm_bindgen trait for generic structs
+        //       reimplement this when it does
         // Inform any subscribers
-        for listener in &self.listeners {
-            let this = JsValue::NULL;
-            listener.call0(&this);
-        }
+        // for listener in &self.listeners {
+        //     let this = JsValue::NULL;
+        //     log("Calling listener");
+        //     match listener.call0(&this) {
+        //         Ok(_) => log("Ok"),
+        //         Err(e) => log("Err"),
+        //     }
+        // }
     }
 
     fn update_description(&self, action: &JsValue) -> State {
         let action: UpdateTodoDescriptionAction = action.into_serde().unwrap();
-        let todos: Vec<Todo> = self.state.todos.iter().map(|todo| {
-            if todo.id == action.id { 
-                Todo::new(todo.id, action.description.clone(), todo.done)
-            } else { 
-                todo.clone()
-            }
-        }).collect();
+        let todos: Vec<Todo> = self.state.todos.iter()
+            .map(|todo| {
+                if todo.id == action.id { 
+                    Todo::new(todo.id, action.description.clone(), todo.done)
+                } else { 
+                    todo.clone()
+                }
+            })
+            .collect();
         State::new(todos)
     }
     
     fn update_done(&self, action: &JsValue) -> State {
         let action: UpdateTodoDoneAction = action.into_serde().unwrap();
-        let todos: Vec<Todo> = self.state.todos.iter().map(|todo| {
-            if todo.id == action.id { 
-                Todo::new(todo.id, todo.description.clone(), action.done)
-            } else { 
-                todo.clone()
-            }
-        }).collect();
+        let todos: Vec<Todo> = self.state.todos.iter()
+            .map(|todo| {
+                if todo.id == action.id { 
+                    Todo::new(todo.id, todo.description.clone(), action.done)
+                } else { 
+                    todo.clone()
+                }
+            })
+            .collect();
         State::new(todos)
     }
 }
