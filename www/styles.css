@@ -14,6 +14,10 @@
     border-bottom: 1px solid red;
 }
 
+.todo .desc, .todo input {
+    width: 90%;
+}
+
 .done {
     display: inline-block;
 }

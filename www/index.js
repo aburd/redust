@@ -28,7 +28,15 @@ const Todo = ({ id, description, done, dispatch }) => {
             </span>
             <span className="desc" onClick={handleFocus}>
                 {editable 
-                    ? <input type="text" ref={inputEl} value={description} onChange={handleDescriptionChange} />
+                    ? (
+                        <input 
+                            type="text" 
+                            ref={inputEl} 
+                            value={description} 
+                            onChange={handleDescriptionChange}
+                            onKeyPress={e => e.key === 'Enter' ? updateEditable(false) : ''}
+                        />
+                    )
                     : <div>{description}</div>
                 }
             </span>
