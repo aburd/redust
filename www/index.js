@@ -22,16 +22,16 @@ const Todo = ({ id, description, done, dispatch }) => {
         updateEditable(!editable)
     }
     return (
-        <li>
-            <div className="desc" onClick={handleFocus}>
+        <li className="todo">
+            <span className="done">
+                <input type="checkbox" checked={done} onChange={toggleDone} />
+            </span>
+            <span className="desc" onClick={handleFocus}>
                 {editable 
                     ? <input type="text" ref={inputEl} value={description} onChange={handleDescriptionChange} />
                     : <div>{description}</div>
                 }
-            </div>
-            <div className="done">
-                <input type="checkbox" checked={done} onChange={toggleDone} />
-            </div>
+            </span>
         </li>
     )
 }
@@ -52,7 +52,8 @@ class App extends Component {
     render() {
         return (
             <div className="container">
-                <ul>
+                <ul className="todos">
+                    <li><h2>Todos</h2></li>
                     {this.state.todos.map(todo => <Todo key={todo.id} dispatch={this.dispatch} {...todo} />)}
                 </ul>
             </div>
