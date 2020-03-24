@@ -35,7 +35,7 @@ impl State {
 
 #[wasm_bindgen]
 pub struct Store {
-    // listeners: Vec<js_sys::Function>,
+    // listeners: Vec<&js_sys::Function>,
     prev_states: Vec<State>,
     state: State,
 }
