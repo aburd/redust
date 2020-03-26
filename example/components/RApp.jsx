@@ -1,29 +1,30 @@
 import React, { Component } from "react"
-import { ActionType } from 'redust'
+import { Actions } from '../reducer'
 import Todo from './Todo'
 
 export default class App extends Component {
   handleToggle = (id, done) => {
     const { dispatch } = this.props;
-    dispatch(ActionType.UPDATE_TODO_DONE, { id, done })
+    dispatch({ type: Actions.UPDATE_TODO_DONE, id, done })
   }
   handleDescription = (id, description) => {
     const { dispatch } = this.props;
-    dispatch(ActionType.UpdateTodoDescription, { id, description })
+    dispatch({ type: Actions.UPDATE_TODO_DESCRIPTION, id, description })
   }
   test = () => {
     const { dispatch, todos } = this.props;
     const [todo] = todos;
     let done = true
-    console.time('redust')
+    console.time('redux')
     for (let i = 0; i < 100000; i++) {
-      dispatch(ActionType.UpdateTodoDone, {
+      dispatch({
+        type: Actions.UPDATE_TODO_DESCRIPTION,
         id: todo.id,
         done,
       })
       done = !done
     }
-    console.timeEnd('redust')
+    console.timeEnd('redux')
   }
   render() {
     return (
