@@ -1,3 +1,18 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: courier, sans-serif;
+    background: #735f5f;
+    color: #211010;
+}
+
+button {
+    padding: 0.5rem 1rem;
+    border: 1px solid #09110e;
+    border-radius: 10px;
+    background: white;
+}
+
 .container {
     width: 80%;
     max-width: 1000px;
@@ -6,16 +21,17 @@
 
 .todos {
     list-style: none;
-    border: 1px solid gray;
+    border: 1px solid #211010;
+    background: white;
     border-radius: 10px;
     padding: 1rem;
 }
 
 .todo {
-    border-bottom: 1px solid red;
+    border-bottom: 1px solid #a2f697;
 }
 .todo:nth-child(odd) {
-    background: #ddd;
+    background: #a2f697;
 }
 
 .todo .desc, .todo input {

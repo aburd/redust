@@ -32,6 +32,8 @@ export default class App extends Component {
   render() {
     return (
       <div className="container">
+        <button onClick={this.handleAdd}>Add Todo</button>
+        <button onClick={this.test}>Test Redust</button>
         <ul className="todos">
           <li>
             <h2>Todos</h2>
@@ -45,8 +47,6 @@ export default class App extends Component {
             />
           ))}
         </ul>
-        <button onClick={this.handleAdd}>Add Todo</button>
-        <button onClick={this.test}>Test Redust</button>
       </div>
     )
   }
