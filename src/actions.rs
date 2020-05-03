@@ -6,6 +6,7 @@ use wasm_bindgen::prelude::*;
 pub enum ActionType {
     UpdateTodoDone,
     UpdateTodoDescription,
+    AddTodo,
 }
 
 #[derive(Deserialize)]
@@ -19,3 +20,6 @@ pub struct UpdateTodoDescriptionAction {
     pub id: u32,
     pub description: String,
 }
+
+#[derive(Deserialize)]
+pub struct AddTodoAction {}

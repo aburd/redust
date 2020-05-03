@@ -7,7 +7,7 @@ mod actions;
 
 use wasm_bindgen::prelude::*;
 use todos::Todo;
-use actions::{ ActionType, UpdateTodoDoneAction, UpdateTodoDescriptionAction };
+use actions::{ ActionType, UpdateTodoDoneAction, UpdateTodoDescriptionAction, AddTodoAction };
 
 // When the `wee_alloc` feature is enabled, use `wee_alloc` as the global
 // allocator.
@@ -76,6 +76,7 @@ impl Store {
         let new_state: State = match action_type {
             ActionType::UpdateTodoDescription => self.update_description(action),
             ActionType::UpdateTodoDone => self.update_done(action),
+            ActionType::AddTodo => self.add_todo(action),
         };
 
         // Update the states in the store itself
@@ -120,6 +121,15 @@ impl Store {
                 }
             })
             .collect();
+        State::new(todos)
+    }
+    
+    fn add_todo(&self, action: &JsValue) -> State {
+        let action: AddTodoAction = action.into_serde().unwrap();
+        let mut todos: Vec<Todo> = self.state.todos.clone();
+        let id = (todos.len() + 1) as u32;
+        let todo: Todo = Todo::new(id, String::from("New todo"), false);
+        todos.push(todo);
         State::new(todos)
     }
 }
