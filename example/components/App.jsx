@@ -11,10 +11,15 @@ export default class App extends Component {
     const { dispatch } = this.props;
     dispatch(ActionType.UpdateTodoDescription, { id, description })
   }
+  handleAdd = () => {
+    const { dispatch } = this.props;
+    dispatch(ActionType.AddTodo, {})
+  }
   test = () => {
     const { dispatch, todos } = this.props;
     const [todo] = todos;
     let done = true
+    console.time('redust')
     for (let i = 0; i < 100000; i++) {
       dispatch(ActionType.UpdateTodoDone, {
         id: todo.id,
@@ -40,6 +45,7 @@ export default class App extends Component {
             />
           ))}
         </ul>
+        <button onClick={this.handleAdd}>Add Todo</button>
         <button onClick={this.test}>Test Redust</button>
       </div>
     )

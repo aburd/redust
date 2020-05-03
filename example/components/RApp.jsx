@@ -11,6 +11,16 @@ export default class App extends Component {
     const { dispatch } = this.props;
     dispatch({ type: Actions.UPDATE_TODO_DESCRIPTION, id, description })
   }
+  handleAdd = () => {
+    const { dispatch, todos } = this.props;
+    dispatch({
+      type: Actions.ADD_TODO,
+      todo: {
+        id: todos.length + 1,
+        description: "New Todo",
+      }
+    })
+  }
   test = () => {
     const { dispatch, todos } = this.props;
     const [todo] = todos;
@@ -42,6 +52,7 @@ export default class App extends Component {
             />
           ))}
         </ul>
+        <button onClick={this.handleAdd}>Add Todo</button>
         <button onClick={this.test}>Test Redust</button>
       </div>
     )
