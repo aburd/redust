@@ -1,5 +1,6 @@
 .container {
     width: 80%;
+    max-width: 1000px;
     margin: auto;
 }
 
@@ -12,6 +13,9 @@
 
 .todo {
     border-bottom: 1px solid red;
+}
+.todo:nth-child(odd) {
+    background: #ddd;
 }
 
 .todo .desc, .todo input {

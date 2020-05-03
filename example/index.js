@@ -53,7 +53,7 @@ class ReduxConnectedApp extends Component {
 
 ReactDOM.render(
     (
-    <div>
+    <div className="container">
       <div>
         <h1>Redust</h1>
         <RedustConnectedApp />
