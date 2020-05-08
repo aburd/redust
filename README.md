@@ -1,5 +1,5 @@
-- (blog-post)[#title]
-- (installation)[#About]
+- [blog-post](#title)
+- [installation](#About)
 
 # Title
 Writing a simple implementation of Redux in Web Assembly
